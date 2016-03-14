@@ -1,0 +1,42 @@
+version: 0.1
+log:
+  level: debug
+  formatter: text
+  fields:
+    service: registry
+    environment: prod
+loglevel: debug
+storage:
+  s3:
+    accesskey: {{PO_REGISTRY_AWS_ID}}
+    secretkey: {{PO_REGISTRY_AWS_KEY}}
+    region: {{PO_REGISTRY_AWS_REGION}}
+    bucket: {{PO_REGISTRY_AWS_BUCKET}}
+    secure: true
+    v4auth: true
+    rootdirectory: {{PO_REGISTRY_AWS_DIRECTORY}}
+  delete:
+    enabled: false
+  cache:
+    blobdescriptor: inmemory
+  redirect:
+    disable: {{PO_REGISTRY_DISABLE_REDIRECT}}
+http:
+  addr: {{PO_REGISTRY_BIND_ADDRESS}}:{{PO_REGISTRY_BIND_PORT}}
+  host: {{PO_REGSITRY_DNS_NAME}}
+  headers:
+    X-Content-Type-Options: [nosniff]
+auth:
+  token:
+    realm: {{PO_REGISTRY_AUTH_REALM}}
+    service: {{PO_REGISTRY_AUTH_SERVICE}}
+    issuer: {{PO_REGISTRY_AUTH_CERT_ISSUER}}
+    rootcertbundle: {{PO_REGISTRY_AUTH_CERT}}
+notifications:
+  endpoints:
+    - name: {{PO_REGISTRY_NOTIFICATIONS_NAME}}
+      url: {{PO_REGISTRY_NOTIFICATIONS_URL}}
+      timeout: 500ms
+      threshold: 5
+      backoff: 1s
+

@@ -1,0 +1,70 @@
+server {
+    listen         80;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 0.0.0.0:443 default default_server;
+
+    ssl on;
+    ssl_certificate /etc/nginx/ssl_crt.crt;
+    ssl_certificate_key /etc/nginx/ssl_key.key;
+    ssl_protocols SSLv3 TLSv1;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    location / {
+        proxy_redirect off;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-HTTPS on;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://{{PORTUS_REGISTRY_PORT_5000_TCP_ADDR}}:5000/;
+    }
+
+    location /v1/_ping {
+        auth_basic off;
+        proxy_redirect off;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-HTTPS on;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://{{PORTUS_REGISTRY_PORT_5000_TCP_ADDR}}:5000/;
+    }
+
+    location /_ping {
+        auth_basic off;
+        proxy_redirect off;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-HTTPS on;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://{{PORTUS_REGISTRY_PORT_5000_TCP_ADDR}}:5000/;
+    }
+
+    access_log off;
+    error_log off;
+
+}
+
+server {
+    listen 0.0.0.0:443;
+    server_name {{PORTUS_FQDN_VAR}};
+    
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
+        proxy_pass http://{{PORTUS_WEB_PORT_3000_TCP_ADDR}}:3000/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 900s;
+        }
+
+
+    access_log /var/log/nginx/{{PROJECT_NAME}}-access.log main;
+    error_log /var/log/nginx/{{PROJECT_NAME}}.log error;
+
+}

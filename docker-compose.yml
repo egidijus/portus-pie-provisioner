@@ -1,0 +1,72 @@
+portus-db:
+  image: library/mariadb
+  container_name: portus-db
+  env_file:
+    - prod_portus.env
+
+portus-web:
+  image: portus-base
+  container_name: portus-web
+  env_file: 
+    - prod_portus.env
+  command: web
+  ports:
+    - "3000:3000"
+  links:
+    - portus-db
+  extra_hosts:
+    - "docker.yourdomain.com:172.17.0.1"
+    - "portus.yourdomain.com:172.17.0.1"
+
+portus-migrate:
+  image: portus-base
+  container_name: portus-migrate
+  env_file: 
+    - prod_portus.env
+  command: migrate
+  links:
+    - portus-db
+  extra_hosts:
+    - "docker.yourdomain.com:172.17.0.1"
+    - "portus.yourdomain.com:172.17.0.1"
+
+portus-crono:
+  image: portus-base
+  container_name: portus-crono
+  env_file: 
+    - prod_portus.env
+  command: crono
+  links:
+    - portus-db
+  extra_hosts:
+    - "docker.yourdomain.com:172.17.0.1"
+    - "portus.yourdomain.com:172.17.0.1"
+
+portus-registry:
+  env_file: 
+    - prod_portus.env
+  image: portus-registry
+  container_name: portus-registry
+  links:
+    - portus-web
+  ports:
+    - 5001:5001 # required to access debug service
+    - "5000:5000"
+  extra_hosts:
+    - "docker.yourdomain.com:172.17.0.1"
+    - "portus.yourdomain.com:172.17.0.1"
+
+portus-nginx:
+  env_file: 
+    - prod_portus.env
+  image: portus-nginx
+  container_name: portus-nginx
+  links:
+    - portus-web
+    - portus-registry
+  ports:
+    - 80:80
+    - 443:443
+  extra_hosts:
+    - "docker.yourdomain.com:172.17.0.1"
+    - "portus.yourdomain.com:172.17.0.1"
