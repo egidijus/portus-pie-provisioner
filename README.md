@@ -6,6 +6,7 @@ You shoul have one certificate for `*.yourdomain.com` the certificate should be 
 
 The final solutions is 
 portus URL = `portus.yourdomain.com` for portus UI
+
 docker URL = `docker.yourdomain.com` for docker login and docker registry
 
 
@@ -18,11 +19,8 @@ docker URL = `docker.yourdomain.com` for docker login and docker registry
 
 ## Quickstart
 
-1. Update secrets and configs in the below files to match your configuration
-
-
+* Update secrets and configs in the below files to match your configuration
 ```
-
 ---
 nginx/ssl_crt.crt
 nginx/ssl_key.key
@@ -39,10 +37,8 @@ registry/config.yml.tmpl
 registry/ssl_crt.crt
 
 docker-compose.yml
-
 ```
-
-2. Run `01_start_config.sh` on your linux host
+ * Run `01_start_config.sh` on your linux host
 You should end up with a working portus system.
 
 
