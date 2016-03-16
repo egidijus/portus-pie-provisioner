@@ -46,12 +46,7 @@ setup_database() {
     COUNT=$((COUNT+5))
 
     printf "Portus: configuring database..."
-    # primary rake
-    docker-compose run --rm portus-base migrate
-     # &> /dev/null
-    # alternative rake
-    #docker-compose run --rm portus sh -c "rake db:create && rake db:migrate && rake db:seed &> /dev/null"
-
+    docker-compose run --rm portus-migrate
     RETRY=$?
     if [ $RETRY -ne 0 ]; then
         printf " failed, will retry\n"
