@@ -160,30 +160,26 @@ cat <<EOM
 
 EOM
 
-echo "Make sure port 3000 and 5000 are open on host ${final_host}"
+echo "Make sure you open port 80 and 443 on the final host"
 printf "\n"
 
-echo "Open http://${final_host}:3000 with your browser and perform the following steps:"
+echo "Open https://portus.yourdomain.com with your browser and perform the following steps:"
 printf "\n"
 echo "  1. Create an admin account"
 echo "  2. You will be redirected to a page where you have to register the registry. In this form:"
 echo "    - Choose a custom name for the registry."
-echo "    - Enter ${final_host}:5000 as the hostname."
-echo "    - Do *not* check the \"Use SSL\" checkbox, since this setup is not using SSL."
+echo "    - Enter https://docker.yourdomain.com as the hostname."
+echo "    - DO CHECK SSL - because this setup is designed for SSL
 printf "\n"
 
-echo "Perform the following actions on the docker hosts that need to interact with your registry:"
-printf "\n"
-echo "  - Ensure the docker daemon is started with the '--insecure-registry ${final_host}:5000'"
-echo "  - Perform the docker login."
 printf "\n"
 echo "To authenticate against your registry using the docker cli do:"
 printf "\n"
-echo "  $ docker login -u <portus username> -p <password> -e <email> ${final_host}:5000"
+echo "  $ docker login -u <portus username> -p <password> -e <email> docker.yourdomain.com"
 printf "\n"
 
 echo "To push an image to the private registry:"
 printf "\n"
 echo "  $ docker pull busybox"
-echo "  $ docker tag busybox ${final_host}:5000/<username>busybox"
-echo "  $ docker push ${final_host}:5000/<username>busybox"
+echo "  $ docker tag busybox docker.yourdomain.com/<username>busybox"
+echo "  $ docker push docker.yourdomain.com/<username>busybox"
