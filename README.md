@@ -2,7 +2,7 @@
 
 This set of scripts and dockerfiles should setup a portus service on a single host with docker.
 This config is designed to be used with wildcard or multi-sub-domain ssl certificates.
-You shoul have one certificate for `*.yourdomain.com` the certificate should be "bundled" so it works with nginx.
+You should have one certificate for `*.yourdomain.com` the certificate should be "bundled" so it works with nginx.
 
 The final solutions is 
 portus URL = `portus.yourdomain.com` for portus UI
